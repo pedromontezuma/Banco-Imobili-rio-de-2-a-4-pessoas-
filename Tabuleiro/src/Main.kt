@@ -9,10 +9,11 @@ fun main(args: Array<String>) {
     val casas = ArrayList<Casas>()
     tabuleiro(casas)
     var players = ArrayList<Jogadores>()
-
+    var winner: String
     var gerador = SecureRandom()
     var resultado = gerador.nextInt(6) + 1
     var rodadas = 0
+    var contador = players.count()
 
 
     println("Bem vindo ao Banco Imobiliário Digital!")
@@ -46,21 +47,29 @@ fun main(args: Array<String>) {
 
     while (rodadas < 1000 && players.count() >= 2) {
         players.forEach {
-            it.jogada(casas, gerador.nextInt(6) + 1)
-            if (!it.jogando && it.eliminado) {
+            if (it.money > 0 && it.jogando && !it.eliminado) {
+                it.jogada(casas, gerador.nextInt(6) + 1)
+            }
+            if (it.money < 0) {
                 it.perdeu(casas)
+                println("Voce foi eliminado!")
+                players.remove(it)
             }
-            var alive = players.forEach {
-                if (!it.eliminado && !it.jogando) {
-                    (players!! as ArrayList).remove(it)
-                }
+            players.forEach {
+                it.money += 10
+            }
+            rodadas += 1
+            if ( rodadas > 50 ){
+                it.aumentarPrecoAluguel(casas[it.position])
             }
         }
-        players.forEach {
-            it.money += 10
-        }
-        rodadas += 1
     }
-    print("Parabéns, você ganhou!")
-
+    if(rodadas > 1000){
+        println("Este jogo excedeu seu limite de rodadas e nao houve vencedores!")
+        return
+    }
+    if (players.count() == 1) {
+        winner = players[0].name
+        print("Parabens $winner, voce ganhou!")
+    }
 }

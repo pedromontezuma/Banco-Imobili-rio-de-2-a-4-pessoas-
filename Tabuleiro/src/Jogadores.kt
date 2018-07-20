@@ -3,7 +3,7 @@ import java.security.SecureRandom
 
 open class Jogadores(val name:String, var money:Int = 300, var position:Int = 0, var jogando:Boolean = true, var eliminado:Boolean = false){
 
-    fun listaPlayers(players:ArrayList<Jogadores>){}
+    fun listaPlayers(players:MutableList<Jogadores>){}
 
     fun perdeu(propriedade:List<Casas>) {
         if (money < 0) {
@@ -40,9 +40,9 @@ open class Jogadores(val name:String, var money:Int = 300, var position:Int = 0,
             }
             else if(casa[this.position].dono !==null){
                 println("Parece que alguém se deu mal, einh " + this.name + "?")
-                println("Você caiu em " + casa[this.position].name + " e deve pagar " + casa[this.position].preçoaluguel + " Juvecoins para " + casa[this.position].dono)
-                println("Pressione enter para efetuar o pagamento!")
-                pagarAluguel(this,casa[this.position].preçoaluguel,casa[this.position].dono)
+                println("Você caiu em " + casa[this.position].name + " e deve pagar " + casa[this.position].preçoaluguel + " Juvecoins para o dono deste local!")
+                pagarAluguel(this, casa[this.position].preçoaluguel,casa[this.position].dono)
+                println("Pagamento efetuado!")
                 println("O seu novo saldo, " + this.name + " é de " + this.money + " Juvecoins!")
             }
         }
@@ -76,6 +76,9 @@ open class Jogadores(val name:String, var money:Int = 300, var position:Int = 0,
         house.dono= this
     }
 
+    open fun aumentarPrecoAluguel(house: Casas){
+        house.preçoaluguel = 100
+    }
 
 }
 abstract class remove(){
